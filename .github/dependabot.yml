@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    # Wait 2 days after a release before opening a PR, so bumps clear pnpm's 24h
+    # minimumReleaseAge supply-chain gate and do not fail `pnpm install --frozen-lockfile`.
+    cooldown:
+      default-days: 2
+    ignore:
+      # Keep @types/node aligned with the supported Node baseline (engines: node >=22).
+      # Do not jump it a major ahead of the runtime it is typed against.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
